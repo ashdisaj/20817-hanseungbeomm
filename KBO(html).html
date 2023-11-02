@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>선수 정보 검색</title>
+
+    <link href="./KBO.css" type="text/css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <h1>선수 정보 검색</h1>
+
+    <!-- 검색 창 -->
+
+    <div id="searchContainer">
+
+        <input type="text" id="playerName" placeholder="선수 이름을 입력하세요">
+
+        <button onclick="searchPlayer()">검색</button>
+
+    </div>
+
+    <!-- 선수 이미지와 결과를 표시할 공간 -->
+
+    <div id="playerInfo">
+
+        <img id="playerImage" src="https://search.pstatic.net/common?type=o&size=150x135&expire=1&refresh=true&quality=95&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Fimage%2Fdss%2F144%2F02%2F22%2F01%2F144_29022201_league_image_url_1680139379291.png" alt="선수 이미지">
+
+    </div>
+
+    <script>
+
+        const input = document.getElementById("playerName");
+
+    input.addEventListener("keyup", function (event) {
+
+        if (event.key === "Enter") {
+
+            searchPlayer();
+
+        }
+
+    });
+
+        // 선수 정보 데이터 (예시)
+
+       
+
+        const playerData = {
+
+            "윤동희": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 20,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/52591.jpg",
+
+                "타율": 0.297,
+
+                "출루율": 0.338,
+
+                "OPS": 0.699
+
+            },
+
+            "이정훈": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 30,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/67644.jpg",
+
+                "타율": 0.376,
+
+                "출루율": 0.433,
+
+                "OPS": 0.880
+
+            },
+
+            "안치홍": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 33,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/79608.jpg",
+
+                "타율": 0.292,
+
+                "출루율": 0.373,
+
+                "OPS": 0.765
+
+            },
+
+            "전준우": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 37,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/78513.jpg",
+
+                "타율": 0.290,
+
+                "출루율": 0.368,
+
+                "OPS": 0.765
+
+            },
+
+            "정훈": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 36,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/60523.jpg",
+
+                "타율": 0.255,
+
+                "출루율": 0.355,
+
+                "OPS": 0.798
+
+
+
+
+
+            },
+
+            "구드럼": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 31,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/53506.jpg",
+
+                "타율": 0.271,
+
+                "출루율": 0.343,
+
+                "OPS": 0.682
+
+            },
+
+            "정보근": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 24,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/68518.jpg",
+
+                "타율": 0.371,
+
+                "출루율": 0.464,
+
+                "OPS": 0.993
+
+            },
+
+            "노진혁": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 34,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/62931.jpg",
+
+                "타율": 0.244,
+
+                "출루율": 0.329,
+
+                "OPS": 0.677
+
+            },
+
+            "김민석": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "타자",
+
+                "나이": 19,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/53554.jpg",
+
+                "타율": 0.269,
+
+                "출루율": 0.327,
+
+                "OPS": 0.686
+
+            },
+
+            "애런 윌커슨": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "선발투수",
+
+                "나이": 34,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/53546.jpg",
+
+                "방어율": 2.03,
+
+                "승패홀세": "7/2/0/0"
+
+               
+
+           
+
+            },
+
+            "찰리 반즈": {
+
+
+
+
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "선발투수",
+
+                "나이": 28,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/52528.jpg",
+
+                "방어율": 3.38,
+
+                "승패홀세": "11/10/0/0"
+
+            },
+
+            "박세웅": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "선발투수",
+
+                "나이": 27,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/64021.jpg",
+
+                "방어율": 3.48,
+
+                "승패홀세": "9/7/0/0"
+
+            },
+
+            "나균안": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "선발투수",
+
+                "나이": 25,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/67539.jpg",
+
+                "방어율": 3.39,
+
+                "승패홀세": "6/8/0/0"
+
+           
+
+            },
+
+            "구승민": {
+
+
+
+
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "불펜투수",
+
+                "나이": 33,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/63543.jpg",
+
+                "방어율": 3.79,
+
+                "승패홀세": "2/6/22/3"
+
+            },
+
+            "김상수": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "불펜투수",
+
+                "나이": 35,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/76430.jpg",
+
+                "방어율": 3.00,
+
+                "승패홀세": "4/2/18/1"
+
+            },
+
+            "최준용": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "불펜투수",
+
+                "나이": 22,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/50556.jpg",
+
+                "방어율": 2.48,
+
+                "승패홀세": "2/3/14/0"
+
+            },
+
+            "김원중": {
+
+                "구단": "롯데 자이언츠",
+
+                "포지션": "마무리투수",
+
+                "나이": 30,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/62528.jpg",
+
+                "방어율": 2.52,
+
+                "승패홀세": "5/6/0/30"
+
+            },
+
+            "박찬호": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 28,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/64646.jpg",
+
+                "타율": 0.304,
+
+                "출루율": 0.360,
+
+                "OPS": 0.744
+
+            },
+
+            "김도영": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 20,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/52605.jpg",
+
+                "타율": 0.300,
+
+                "출루율": 0.369,
+
+                "OPS": 0.814
+
+            },
+
+            "나성범": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 34,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/62947.jpg",
+
+                "타율": 0.362,
+
+                "출루율": 0.430,
+
+                "OPS": 1.098
+
+            },
+
+            "최형우": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 39,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/72443.jpg",
+
+                "타율": 0.298,
+
+                "출루율": 0.396,
+
+                "OPS": 0.874
+
+            },
+
+            "소크라테스": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 31,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/52630.jpg",
+
+                "타율": 0.284,
+
+                "출루율": 0.352,
+
+                "OPS": 0.836
+
+            },
+
+            "김선빈": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 33,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/78603.jpg",
+
+                "타율": 0.313,
+
+                "출루율": 0.370,
+
+                "OPS": 0.722
+
+            },
+
+            "이창진": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 32,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/64560.jpg",
+
+                "타율": 0.280,
+
+                "출루율": 0.385,
+
+                "OPS": 0.766
+
+            },
+
+            "황대인": {
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 27,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/65610.jpg",
+
+                "타율": 0.234,
+
+                "출루율": 0.317,
+
+                "OPS": 0.671
+
+            },
+
+            "김태군": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "타자",
+
+                "나이": 33,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/78122.jpg",
+
+                "타율": 0.276,
+
+                "출루율": 0.322,
+
+                "OPS": 0.647
+
+            },
+
+            "양현종": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "선발투수",
+
+                "나이": 35,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/77637.jpg",
+
+                "방어율": 3.94,
+
+                "승패홀세": "9/11/0/0"
+
+            },
+
+            "파노니": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "선발투수",
+
+                "나이": 29,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/52606.jpg",
+
+                "방어율": 2.81,
+
+                "승패홀세": "6/3/0/0"
+
+            },
+
+            "산체스": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "선발투수",
+
+                "나이": 28,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/53665.jpg",
+
+                "방어율": 3.94,
+
+                "승패홀세": "4/4/0/0"
+
+            },
+
+            "이의리": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "선발투수",
+
+                "나이": 21,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/51648.jpg",
+
+                "방어율": 3.94,
+
+                "승패홀세": "11/7/0/0"
+
+            },
+
+            "윤영철": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "선발투수",
+
+                "나이": 19,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/53613.jpg",
+
+                "방어율": 4.19,
+
+                "승패홀세": "8/7/0/0"
+
+            },
+
+            "김유신": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "불펜투수",
+
+                "나이": 23,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/68659.jpg",
+
+                "방어율": 4.76,
+
+                "승패홀세": "0/1/2/0"
+
+            },
+
+            "전상현": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "불펜투수",
+
+                "나이": 27,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/66609.jpg",
+
+                "방어율": 2.66,
+
+                "승패홀세": "8/3/13/1"
+
+            },
+
+             "최지민": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "불펜투수",
+
+                "나이": 20,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/52639.jpg",
+
+                "방어율": 2.09,
+
+                "승패홀세": "6/3/12/3"
+
+            },
+
+             "임기영": {
+
+
+
+
+
+                "구단": "기아 타이거즈",
+
+                "포지션": "불펜투수",
+
+                "나이": 23,
+
+                "이미지": "https://lgcxydabfbch3774324.cdn.ntruss.com/KBO_IMAGE/person/middle/2023/62754.jpg",
+
+                "방어율": 2.69,
+
+                "승패홀세": "4/4/16/3"
+
+            },
+
+            // 다른 선수 정보들...
+
+        };
+
+        // 검색 함수
+
+        function searchPlayer() {
+
+            const playerName = document.getElementById("playerName").value;
+
+            const playerInfoContainer = document.getElementById("playerInfo");
+
+            const playerImage = document.getElementById("playerImage");
+
+            if (playerName in playerData) {
+
+                const playerInfo = playerData[playerName];
+
+                let playerInfoHTML = `<h2>${playerName}</h2>
+
+                <img src="${playerInfo.이미지}" alt="${playerName}의 이미지">
+
+                <p>구단: ${playerInfo.구단}</p>
+
+                <p>포지션: ${playerInfo.포지션}</p>
+
+                <p>나이: ${playerInfo.나이}</p>`;
+
+                // 방어율과 OPS 데이터가 있는 경우에만 추가
+
+                if ("방어율" in playerInfo) {
+
+                    playerInfoHTML += `<p>방어율: ${playerInfo.방어율}</p>`;
+
+                }
+
+                if ("승패홀세" in playerInfo) {
+
+                    playerInfoHTML += `<p>승패홀세: ${playerInfo.승패홀세}</p>`;
+
+                }
+
+                if ("출루율" in playerInfo) {
+
+                    playerInfoHTML += `<p>출루율: ${playerInfo.출루율}</p>`;
+
+                }
+
+                if ("타율" in playerInfo) {
+
+                    playerInfoHTML += `<p>타율: ${playerInfo.타율}</p>`;
+
+                }
+
+                playerInfoContainer.innerHTML = playerInfoHTML;
+
+            } else {
+
+                playerInfoContainer.innerHTML = "선수를 찾을 수 없습니다.";
+
+                playerImage.src = ""; // 이미지를 지우기
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
